@@ -3,15 +3,15 @@
 PyScrape is a basic web scraper that I wrote for practice while learning Python. Currently, it's only functional the website that I wrote it for, which is the discount items page of Schiit Audio's sales website, which can be found here: 'https://www.schiit.com/b-stocks'
 
 ## Table of Contents
--About
--How It Works
--Usage
-    -To Test
-    -Prerequisites
--Getting Started
--To Do
--Author
--Acknowledgments
+- About
+- How It Works
+- Usage
+    - To Test
+    - Prerequisites
+- Getting Started
+- To Do
+- Author
+- Acknowledgments
 
 ## About
 
@@ -49,15 +49,16 @@ I will provide some example items that can be entered in the website and item GU
 If you do not wish for any emails to be sent while testing, I will provide a "no email" version with the smtplib section commented out to be run so that the user can run it while only getting the console output and csv data file.
 
 ### Prerequisites
--Python 3.6+ (if lower, f-strings neeed to be reformatted)
--pandas
--beautifulsoup4
+
+- Python 3.6+, if lower f-strings neeed to be reformatted)
+- pandas
+- beautifulsoup4
 
 ## To Do
--Implement a way for HTML to be entered via the GUI, so it can be more easily adapted to other websites
--More thorough testing
--Improve GUI aesthetics and formatting
--Improve my code!
+- Implement a way for HTML to be entered via the GUI, so it can be more easily adapted to other websites
+- More thorough testing
+- Improve GUI aesthetics and formatting
+- Improve my code!
 
 ## Author
 
