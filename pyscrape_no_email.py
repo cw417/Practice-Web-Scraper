@@ -7,13 +7,13 @@ from datetime import date
 import gui
 
 # Set up dictionary to hold entries from GUI
-json_fp = 'piescrape_dict.json'
+json_fp = 'pyscrape_dict.json'
 
 def get_dict(json_fp):
     with open(json_fp) as json_data:
-        piescrape_dict = json.load(json_data)
+        pyscrape_dict = json.load(json_data)
         json_data.close()
-        return piescrape_dict
+        return pyscrape_dict
 
 entry_dict = get_dict(json_fp)
 
@@ -37,7 +37,7 @@ email_pw = entry_dict["email_pw"]
 email_receive = entry_dict["email_receive"]
 
 # Save pandas csv in current working directory
-new_file = open("scraper_info.csv", 'a')
+new_file = open("pyscrape_info.csv", 'a')
 csv_filepath = new_file
 
 def parse_page(url):
@@ -66,7 +66,7 @@ def send_email(msg):
         smtp.ehlo()
         smtp.login(email_address, email_pw)   
 
-        subj = 'Schiit Watcher'
+        subj = 'PyScrape Update'
         body = msg
 
         smtp.sendmail(email_address, email_receive, msg)
