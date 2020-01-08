@@ -1,7 +1,7 @@
 import tkinter as tk
 import json
 
-class ScrapeGUI(tk.Frame):
+class PyScrapeGUI(tk.Frame):
 
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)                 
@@ -10,7 +10,7 @@ class ScrapeGUI(tk.Frame):
 
     def init_window(self):
   
-        self.master.title("Web Scrape GUI")
+        self.master.title("PyScrape")
 
         
         self.pack(fill=tk.BOTH, expand=1)
@@ -35,7 +35,7 @@ class ScrapeGUI(tk.Frame):
             rec = e_rec.get()
             dict.update({'email_receive': rec})
 
-            dict_file = json.dump(dict, open("pyscrape_dict.json", 'w'))
+            dict_file = json.dump(dict, open("pyscrape_dict.json", 'w'), indent=4, sort_keys=True)
 
         # Create Labels for entry fields
         l_url = tk.Label(self, width=label_width, text="Enter URL: ")
@@ -51,7 +51,7 @@ class ScrapeGUI(tk.Frame):
         e_pw = tk.Entry(self, width=entry_width)
         e_rec = tk.Entry(self, width=entry_width)
 
-        # Create buttons for edit headers and submit
+        # Create submit button
         b_sub = tk.Button(self, width=button_width, text="Submit", command=get_entries)
 
         # Set up layout of label fields
@@ -68,7 +68,7 @@ class ScrapeGUI(tk.Frame):
         e_pw.grid(row=3, column=1)
         e_rec.grid(row=4, column=1)
 
-        # Set up layout of buttons
+        # Set button layout
         # Starts at 10 to enable later addition of extra entry fields
         b_sub.grid(row=10, column=0)
 
@@ -76,6 +76,6 @@ root = tk.Tk()
 
 root.geometry("600x127")
 
-app = ScrapeGUI(root)
+app = PyScrapeGUI(root)
 root.mainloop()
 
