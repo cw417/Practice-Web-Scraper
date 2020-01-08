@@ -35,7 +35,7 @@ class PyScrapeGUI(Frame):
             rec = e_rec.get()
             dict.update({'email_receive': rec})
 
-            dict_file = json.dump(dict, open("piescrape_dict.json", 'w'))
+            dict_file = json.dump(dict, open("piescrape_dict.json", 'w'), indent=4, sort_keys=True)
 
         # Create Labels for entry fields
         l_url = Label(self, width=label_width, text="Enter URL: ")
