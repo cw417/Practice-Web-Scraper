@@ -1,7 +1,7 @@
 from tkinter import *
 import json
 
-class ScrapeGUI(Frame):
+class PyScrapeGUI(Frame):
 
     def __init__(self, master=None):
         Frame.__init__(self, master)                 
@@ -10,7 +10,7 @@ class ScrapeGUI(Frame):
 
     def init_window(self):
   
-        self.master.title("Web Scrape GUI")
+        self.master.title("PyScrape GUI")
 
         
         self.pack(fill=BOTH, expand=1)
