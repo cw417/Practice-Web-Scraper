@@ -34,7 +34,7 @@ I plan on editing it later so that the desired HTML can be entered via the GUI f
 5) Pandas is then used called to create a CSV file containing the item name, price, and date it was checked for price tracking purposes. This file will be created if not found, or appended to if it has already been created.
 
 6) The title and price are then formatted into as an f-string with: f"{title} is {price} on {date.today()}".
-ex. "Asgard 2 is $159 on 2020-01-05".
+- ex. "Asgard 2 is $159 on 2020-01-05"
 
 7) The formatted string is then printed to screen.
 
