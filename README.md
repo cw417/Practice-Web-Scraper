@@ -44,13 +44,19 @@ I plan on editing it later so that the desired HTML can be entered via the GUI f
 
 ### TO TEST
 
-I will provide some example items that can be entered in the website and item GUI fields so that you can run the search easily without having to look at the website:
+I will provide the website URL and some example items below for testing that will also be provided as commented out options in the code. These can be entered in the website and item GUI fields so that you can run the search easily without having to look at the website:
+    - URL: 'https://www.schiit.com/b-stocks'
+    - Item Name:
+        - 'Asgard 2' - this item is currently listed as of January 2020
+            - Will return price in formatted info
+        - 'Yggdrasil' - this is an item that is in Schiit's normal catalog, but is not currently listed on the B-Stock page
+            - Will return 'not listed' as price in formatted info
 
 If you do not wish for any emails to be sent while testing, I will provide a "no email" version with the smtplib section commented out to be run so that the user can run it while only getting the console output and csv data file.
 
 ### Prerequisites
 
-- Python 3.6+, if lower f-strings neeed to be reformatted)
+- Python 3.6+, if lower f-strings neeed to be reformatted
 - pandas
 - beautifulsoup4
 
