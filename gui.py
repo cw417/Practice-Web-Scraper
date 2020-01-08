@@ -76,6 +76,6 @@ root = Tk()
 
 root.geometry("600x127")
 
-app = ScrapeGUI(root)
+app = PyScrapeGUI(root)
 root.mainloop()
 
