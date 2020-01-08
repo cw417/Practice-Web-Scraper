@@ -25,7 +25,7 @@ I plan on editing it later so that the desired HTML can be entered via the GUI f
 
 1) PyScrape launches a GUI built in tkinter that contains input fields for desired website, name of item to search, sender email and password, and receiver email. 
 
-2) When the user clicks the "Submit" button, these are then put into a dictionary, which is stored as a JSON file which is written into the currently active folder. Note that clicking the "Submit" button overwrites the JSON file with each press, so it will only ever contain a single dictionary.
+2) When the user clicks the "Submit" button, these are then put into a dictionary, which is stored as a JSON file that is written into the current working directory. Note that clicking the "Submit" button overwrites the JSON file with each press, so it will not store multiple inputs.
 
 3) After the GUI window is closed, the main portion of the code then creates a dictionary, which it sets equal to the dictionary read from the JSON file.
 
@@ -63,6 +63,11 @@ If you do not wish for any emails to be sent while testing, I will provide a "no
 ## To Do
 - Implement a way for HTML to be entered via the GUI, so it can be more easily adapted to other websites
 - More thorough testing
+- Add method to store password more securely
+- Add method to delete the JSON afterwards, so personal info is not stored in the JSON after close
+- Store JSON and CSV files in user supplied filepath, if desired
+- Add ability to search for multiple items at a time
+- Create tkinter labels/fields/buttons with an iterable function
 - Improve GUI aesthetics and formatting
 - Improve my code!
 
