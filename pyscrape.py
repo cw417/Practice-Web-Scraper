@@ -8,6 +8,7 @@ import gui
 
 # Set up dictionary to hold entries from GUI
 json_fp = 'pyscrape_dict.json'
+csv_fp = 'pyscrape_info.csv'
 
 def get_dict(json_fp):
     with open(json_fp) as json_data:
@@ -37,7 +38,7 @@ email_pw = entry_dict["email_pw"]
 email_receive = entry_dict["email_receive"]
 
 # Save pandas csv in current working directory
-new_file = open("pyscrape_info.csv", 'a')
+new_file = open(csv_fp, 'a')
 csv_filepath = new_file
 
 def parse_page(url):
@@ -72,14 +73,19 @@ def send_email(msg):
         smtp.sendmail(email_address, email_receive, msg)
 
 def make_pandas(title, price, csv_filepath):
-    data = [[title, price, date.today()]]
-    df = pd.DataFrame(data, columns = ['Item', 'Price', 'Date'])
+    data_layout = [[title, price, date.today()]]
+    df = pd.DataFrame(data_layout, columns = ['Item', 'Price', 'Date'])
     append_csv = df.to_csv(csv_filepath, mode='a', header=False)
+
+def print_pandas(csv_filepath):
+    data = pd.read_csv(csv_filepath)
+    print(data.tail())
 
 if __name__ == '__main__':
     soup = parse_page(url)
     title_price = get_title_price(soup)
     make_pandas(title_price[0], title_price[1], csv_filepath)
+    print_pandas(csv_fp)
     formatted_info = format_info(title_price[0], title_price[1])
     print(formatted_info)
     send_email(formatted_info)
