@@ -5,6 +5,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import date
 import gui
+import os
 
 # Set up dictionary to hold entries from GUI
 json_fp = 'pyscrape_dict.json'
@@ -75,16 +76,24 @@ def send_email(msg):
 def make_pandas(title, price, csv_filepath):
     data_layout = [[title, price, date.today()]]
     df = pd.DataFrame(data_layout, columns = ['Item', 'Price', 'Date'])
-    append_csv = df.to_csv(csv_filepath, mode='a', header=False)
+    append_csv = df.to_csv(csv_filepath, mode='a', header=True, index=False)
 
 def print_pandas(csv_filepath):
     data = pd.read_csv(csv_filepath)
     print(data.tail())
 
+def append_pandas(title, price, csv_filepath):
+    data = [[title, price, date.today()]]
+    df = pd.DataFrame(data)
+    append_csv = df.to_csv(csv_filepath, mode='a', header=False, index=False)
+
 if __name__ == '__main__':
     soup = parse_page(url)
     title_price = get_title_price(soup)
-    make_pandas(title_price[0], title_price[1], csv_filepath)
+    if not os.path.isfile(csv_fp):
+        make_pandas(title_price[0], title_price[1], csv_filepath)
+    else:
+        append_pandas(title_price[0], title_price[1], csv_filepath)
     print_pandas(csv_fp)
     formatted_info = format_info(title_price[0], title_price[1])
     print(formatted_info)
