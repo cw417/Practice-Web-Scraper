@@ -11,9 +11,9 @@ json_fp = 'pyscrape_dict.json'
 
 def get_dict(json_fp):
     with open(json_fp) as json_data:
-        pyscrape_dict = json.load(json_data)
+        dict = json.load(json_data)
         json_data.close()
-        return pyscrape_dict
+        return dict
 
 entry_dict = get_dict(json_fp)
 
