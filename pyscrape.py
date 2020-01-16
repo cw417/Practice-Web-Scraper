@@ -21,7 +21,7 @@ entry_dict = get_dict(json_fp)
 
 # URL of website
 # Scrapey currently only works for the webtsite it was written for, listed below:
-# TEST URL: 'https://www.schiit.com/b-stocks'
+#TEST url = 'https://www.schiit.com/b-stocks'
 url = entry_dict["url"]
 
 # Name of item to check for 
@@ -37,10 +37,6 @@ headers = {'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12499.66.0) AppleWebKit/
 email_address = entry_dict["email_address"]
 email_pw = entry_dict["email_pw"]
 email_receive = entry_dict["email_receive"]
-
-# Save pandas csv in current working directory
-new_file = open(csv_fp, 'a')
-csv_filepath = new_file
 
 def parse_page(url):
     page = requests.get(url, headers=headers)
@@ -76,28 +72,20 @@ def send_email(msg):
 def make_pandas(title, price, csv_filepath):
     data_layout = [[title, price, date.today()]]
     df = pd.DataFrame(data_layout, columns = ['Item', 'Price', 'Date'])
-    append_csv = df.to_csv(csv_filepath, mode='a', header=True)
-
-def print_pandas(csv_filepath):
-    data = pd.read_csv(csv_filepath)
-    print(data.tail())
+    make_file = df.to_csv(csv_filepath, mode='a', header=True)
 
 def append_pandas(title, price, csv_filepath):
-    data = [[title, price, date.today()]]
-    df = pd.DataFrame(data)
+    data_layout = [[title, price, date.today()]]
+    df = pd.DataFrame(data_layout)
     append_csv = df.to_csv(csv_filepath, mode='a', header=False)
-
-def append_pandas_isfile(title, price, csv_path):
-    if not os.path.isfile(csv_fp):
-        make_pandas(title, price, csv_path)
-    else:
-        append_pandas(title, price, csv_path)
 
 if __name__ == '__main__':
     soup = parse_page(url)
     title_price = get_title_price(soup)
-    append_pandas_isfile(title_price[0], title_price[1], csv_fp)
-    #print_pandas(csv_fp)
+    if not os.path.isfile(csv_fp):
+        make_pandas(title_price[0], title_price[1], csv_fp)
+    else:    
+        append_pandas(title_price[0], title_price[1], csv_fp)
     formatted_info = format_info(title_price[0], title_price[1])
     print(formatted_info)
     send_email(formatted_info)
