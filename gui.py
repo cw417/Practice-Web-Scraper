@@ -11,7 +11,6 @@ class PyScrapeGUI(tk.Frame):
     def init_window(self):
   
         self.master.title("PyScrape")
-
         
         self.pack(fill=tk.BOTH, expand=1)
 
@@ -52,7 +51,7 @@ class PyScrapeGUI(tk.Frame):
         e_rec = tk.Entry(self, width=entry_width)
 
         # Create submit button
-        b_sub = tk.Button(self, width=button_width, text="Submit", command=get_entries)
+        b_sub = tk.Button(self, width=button_width, text="Submit", command=lambda:[get_entries(), root.quit()])
 
         # Set up layout of label fields
         l_url.grid(row=0, column=0, sticky='w')
@@ -74,7 +73,7 @@ class PyScrapeGUI(tk.Frame):
 
 root = tk.Tk()
 
-root.geometry("600x127")
+root.geometry("600x132")
 
 app = PyScrapeGUI(root)
 root.mainloop()
