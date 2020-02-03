@@ -30,6 +30,9 @@ class PyScrapeGUI(tk.Frame):
         self.pw = ''
         self.rec = ''
 
+        # Flag to be used for errors
+        self.error_flag = ''
+
         # Some page settings
         label_width = 20
         entry_width = 60
@@ -50,11 +53,13 @@ class PyScrapeGUI(tk.Frame):
         self.e_rec = tk.Entry(self, width=entry_width)
 
         # Create buttons
-        b_sub = tk.Button(self, width=button_width, text="Submit", command=lambda: [get_entries(), run_pyscrape(), self.e_url.focus()])
-        b_sub_no_email = tk.Button(self, width=button_width, text="Submit w/o email", command=lambda: [get_entries(), run_pyscrape_no_email(), self.e_url.focus()])
+        b_sub = tk.Button(self, width=button_width, text="Submit", command=lambda: [run_pyscrape(), self.e_url.focus()])
+        b_sub_no_email = tk.Button(self, width=button_width, text="Submit w/o email", command=lambda: [run_pyscrape_no_email(), self.e_url.focus()])
+        b_clear_entries = tk.Button(self, width=button_width, text="Clear entries", command=lambda: clear_entries())
         b_close = tk.Button(self, width=button_width, text="Close", command=lambda: self.quit())
         b_sub.grid(row=10, column=0)
-        b_sub_no_email.grid(row=11, column=0)
+        b_sub_no_email.grid(row=10, column=1, sticky='w')
+        b_clear_entries.grid(row=11, column=0)
         b_close.grid(row=12, column=0)
 
         # Set up layout of label fields
@@ -73,13 +78,17 @@ class PyScrapeGUI(tk.Frame):
 
 
         def get_entries():
-            """This function gets entries from the fields and returns them
-            as a dictionary when the submit button is pressed"""
+            # This function gets entries from the fields and returns them
+            # as a dictionary when the submit button is pressed
             self.url = self.e_url.get()
             self.item = self.e_item.get()
             self.add = self.e_add.get()
             self.pw = self.e_pw.get()
             self.rec = self.e_rec.get()
+
+
+        def clear_entries():
+            # Repeat of get_entries that does not clear entry fields
             self.e_url.delete(0, tk.END)
             self.e_item.delete(0, tk.END)
             self.e_add.delete(0, tk.END)
@@ -87,23 +96,29 @@ class PyScrapeGUI(tk.Frame):
             self.e_rec.delete(0, tk.END)
 
         def parse_page(url):
-            page = requests.get(url, headers=self.headers)
-            soup = BeautifulSoup(page.content, 'html.parser')
-            return soup
+            try:
+                page = requests.get(url, headers=self.headers)
+                soup = BeautifulSoup(page.content, 'html.parser')
+                return soup
+            except (requests.exceptions.MissingSchema, requests.exceptions.InvalidSchema):
+                self.error_flag = 'InvalidURL'
 
         def get_price(soup):
-            products = soup.find_all('div', class_='product')
-            for product in products:
-                title = product.find('div', class_='title').get_text().strip()
-                price = product.find('div', class_='price').get_text().strip()
-                if self.item in title:
-                    return price
-            else:
-                return 'not listed'
+            try:
+                products = soup.find_all('div', class_='product')
+                for product in products:
+                    title = product.find('div', class_='title').get_text().strip()
+                    price = product.find('div', class_='price').get_text().strip()
+                    if self.item in title:
+                        return price
+                else:
+                    return 'not listed'
+            except AttributeError:
+                self.error_flag = 'AttributeError'
 
         def send_email(msg):
             if self.add == '' or self.pw == '' or self.rec == '':
-                mb.showinfo("Error", "Please enter the required email info.")
+                self.error_flag = 'NoEmailInfo'
             else:    
                 with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
                     smtp.ehlo()
@@ -123,25 +138,39 @@ class PyScrapeGUI(tk.Frame):
             df.to_csv(self.csv_fp, mode='a', header=False)
 
         def run_pyscrape():
+            get_entries()
             soup = parse_page(self.url)
-            price = get_price(soup)
-            formatted_info = f"{self.item} is {price} on {self.today}"
-            print(formatted_info)
-            if not os.path.isfile(self.csv_fp):
-                make_pandas(price)
-            else:    
-                append_pandas(price)
-            send_email("\n" + formatted_info)
+            if self.error_flag == 'InvalidURL':
+                mb.showinfo("Error", "Please enter a valid URL and item name.")
+            elif self.error_flag == 'AttributeError':
+                mb.showinfo("Error", "Please enter a valid item name.")
+            elif self.error_flag == 'NoEmailInfo':
+                mb.showinfo("Error", "Please enter valid email credentials.")
+            else:
+                price = get_price(soup)
+                formatted_info = f"{self.item} is {price} on {self.today}"
+                print(formatted_info)
+                if not os.path.isfile(self.csv_fp):
+                    make_pandas(price)
+                else:    
+                    append_pandas(price)
+                send_email("\n" + formatted_info)
 
         def run_pyscrape_no_email():
+            get_entries()
             soup = parse_page(self.url)
-            price = get_price(soup)
-            formatted_info = f"{self.item} is {price} on {self.today}"
-            print(formatted_info)
-            if not os.path.isfile(self.csv_fp):
-                make_pandas(price)
-            else:    
-                append_pandas(price)
+            if self.error_flag == 'InvalidURL':
+                mb.showinfo("Error", "Please enter a valid URL and item name.")
+            elif self.error_flag == 'AttributeError':
+                mb.showinfo("Error", "Please enter a valid item name.")
+            else:
+                price = get_price(soup)
+                formatted_info = f"{self.item} is {price} on {self.today}"
+                print(formatted_info)
+                if not os.path.isfile(self.csv_fp):
+                    make_pandas(price)
+                else:    
+                    append_pandas(price)
 
 root = tk.Tk()
 
