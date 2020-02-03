@@ -21,7 +21,7 @@ PyScrape is currently not functional for most websites, but can be tested on the
 
 I plan on editing it later so that the desired HTML can be entered via the GUI for use when parsing in order to make it more functional for other websites.
 
-Currently, I'm working on "compare_files.py" which will a separate program to compare files on one's own computer to those listed on a website. It can be used when a user is trying to download sequential files from a website, but may already have some of those files. It will return the names of the files listed on the website that are not currently in the provided directory, or vice versa.
+Currently, I'm working on "compare_files.py" which will be a separate program to compare files on one's own computer to those listed on a website. It can be used when a user is trying to download sequential files from a website, but may already have some of those files. It will write the names of the files listed on the website that are not currently in the provided directory to a json file.
 
 ## How It Works
 
