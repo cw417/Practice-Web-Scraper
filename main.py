@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
+from tkinter import messagebox as mb
 import tkinter as tk
 import pandas as pd
 import requests
@@ -14,13 +15,13 @@ class PyScrapeGUI(tk.Frame):
 
     def init_window(self):
         self.master.title("PyScrape")
-        self.today = str(datetime.now())
+        self.today = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # File for data to be saved in csv
         self.csv_fp = 'pyscrape.csv'
 
         # Headers for requests
-        self.headers = headers = {'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12499.66.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.106 Safari/537.36'}
+        self.headers = {'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12499.66.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.106 Safari/537.36'}
 
         # Create variables to be accessed
         self.url = ''
@@ -49,10 +50,12 @@ class PyScrapeGUI(tk.Frame):
         self.e_rec = tk.Entry(self, width=entry_width)
 
         # Create buttons
-        b_sub = tk.Button(self, width=button_width, text="Submit", command=lambda: [get_entries(), run_pyscrape()])
+        b_sub = tk.Button(self, width=button_width, text="Submit", command=lambda: [get_entries(), run_pyscrape(), self.e_url.focus()])
+        b_sub_no_email = tk.Button(self, width=button_width, text="Submit w/o email", command=lambda: [get_entries(), run_pyscrape_no_email(), self.e_url.focus()])
         b_close = tk.Button(self, width=button_width, text="Close", command=lambda: self.quit())
         b_sub.grid(row=10, column=0)
-        b_close.grid(row=11, column=0)
+        b_sub_no_email.grid(row=11, column=0)
+        b_close.grid(row=12, column=0)
 
         # Set up layout of label fields
         l_url.grid(row=0, column=0, sticky='w')
@@ -99,26 +102,25 @@ class PyScrapeGUI(tk.Frame):
                 return 'not listed'
 
         def send_email(msg):
-            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
-                smtp.ehlo()
-                smtp.starttls()
-                smtp.ehlo()
-                smtp.login(self.add, self.pw)   
-
-                subj = 'PyScrape Update'
-                body = msg
-
-                smtp.sendmail(self.add, self.rec, msg)
+            if self.add == '' or self.pw == '' or self.rec == '':
+                mb.showinfo("Error", "Please enter the required email info.")
+            else:    
+                with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                    smtp.ehlo()
+                    smtp.starttls()
+                    smtp.ehlo()
+                    smtp.login(self.add, self.pw)
+                    smtp.sendmail(self.add, self.rec, msg)
 
         def make_pandas(price):
             data_layout = [[self.item, price, self.today]]
             df = pd.DataFrame(data_layout, columns = ['Item', 'Price', 'Date'])
-            make_file = df.to_csv(self.csv_fp, mode='a', header=True)
+            df.to_csv(self.csv_fp, mode='a', header=True)
 
         def append_pandas(price):
             data_layout = [[self.item, price, self.today]]
             df = pd.DataFrame(data_layout)
-            append_csv = df.to_csv(self.csv_fp, mode='a', header=False)
+            df.to_csv(self.csv_fp, mode='a', header=False)
 
         def run_pyscrape():
             soup = parse_page(self.url)
@@ -130,6 +132,16 @@ class PyScrapeGUI(tk.Frame):
             else:    
                 append_pandas(price)
             send_email("\n" + formatted_info)
+
+        def run_pyscrape_no_email():
+            soup = parse_page(self.url)
+            price = get_price(soup)
+            formatted_info = f"{self.item} is {price} on {self.today}"
+            print(formatted_info)
+            if not os.path.isfile(self.csv_fp):
+                make_pandas(price)
+            else:    
+                append_pandas(price)
 
 root = tk.Tk()
 
