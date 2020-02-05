@@ -18,7 +18,7 @@ class SchiitAudioScrapeGUI(tk.Frame):
         self.today = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # File for data to be saved in csv
-        self.csv_fp = 'schiit_aduio_scraper.csv'
+        self.csv_fp = 'schiit_audio_scraper.csv'
 
         # Headers for requests
         self.headers = {'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12499.66.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.106 Safari/537.36'}
@@ -173,7 +173,6 @@ class SchiitAudioScrapeGUI(tk.Frame):
                     append_pandas(price)
 
 root = tk.Tk()
-
 app = SchiitAudioScrapeGUI(root)
 app.pack(fill=tk.BOTH, expand=1)
 root.mainloop()
