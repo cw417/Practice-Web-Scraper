@@ -15,9 +15,9 @@ PyScrape is a basic web scraper that I wrote for practice while learning Python.
 
 ## About
 
-Schiit Audio Scraper is an attempt at creating a basic web scraper that can be utilized through a graphical user interface modeled in tkinter. The GUI gives the user the ability to enter their desired website url, item to search for, sender email and password, and receiver email. It includes a Submit button that will get all of the entries in the desired fields and pass them off as a dictionary to a json file. The name of the item the user entered is then compared to a section of text that was retreived and parsed using requests and Beautiful Soup 4, which can include a list of items.  
+Schiit Audio Scraper is an attempt at creating a basic web scraper that can be utilized through a graphical user interface modeled in tkinter. The GUI gives the user the ability to enter their desired website url, item to search for, sender email and password, and receiver email. It includes a Submit button that will get all of the entries in the desired fields, a "Submit without email" button if the user only wishes to perform the search, but does not wish to send out an email with the results, as well as a "Clear Entries" button to clear the entry fields, and a "Close" button to close the program. The name of the item the user entered is then compared to a section of text that was retreived and parsed using requests and Beautiful Soup 4, which can include a list of items. Schiit Audio Scraper is currently not functional for other websites, but can be tested on the discount items page of Schiit Audio's sales website, found here: https://www.schiit.com/b-stocks
 
-Schiit Audio Scraper is currently not functional for other websites, but can be tested on the discount items page of Schiit Audio's sales website, found here: https://www.schiit.com/b-stocks
+Ebay Scraper works similarly to Schiit Audio Scraper, and will search through an eBay.ca results page to find items within a certain price range. The user passes in the URL from the eBay.ca search of an item they are looking for, as well as a maximum price that they wish to pay for the item. Currently, the email functionality for this program is disabled while I work on formatting the results so they can be displayed more clearly in an email sent via smtplib, but the entry fields for email info are still present. The program searches for the listed price as well as the shipping price, combines the two prices into a total price, and compares the user-entered maximum price against the total price of that item. If the total price of the item is less than or equal to the maximum price specified by the user, the item will be printed to screen.
 
 I plan on adapting the basic framework it to other websites. Currently, I have version for:
 - Schiit Audio B-Stocks
@@ -48,7 +48,7 @@ Currently, I'm working on "compare_files.py" which will be a separate program to
 
 ### TO TEST
 
-If you do not wish for any emails to be sent while testing, I will provide a "no email" version with the smtplib section commented out to be run so that the user can run it while only getting the console output and csv data file.
+If you do not wish for any emails to be sent while testing, I will provide a "Submit without email" button in the GUI so that it is not necessary to enter any email info to complete the search.
 
 #### schiit_audio_scraper.py: 
 I will provide the website URL and some example items below for testing that will also be provided as commented out options in the code. These can be entered in the website and item GUI fields so that you can run the search easily without having to look at the website:
@@ -61,8 +61,6 @@ I will provide the website URL and some example items below for testing that wil
 
 #### ebay_scraper.py
 This program can be tested using a URL from a search on ebay.ca. You must first search for an item, then copy/paste that URL into the "Enter URL: " field. Please enter the maximum price that you would like to pay for the item into the "Enter max" price field, and if desired, email info. I plan to add email functionality to this version once I'm able to format the large list of results properly in smtplib.
-
-
 
 ### Prerequisites
 
