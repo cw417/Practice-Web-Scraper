@@ -13,6 +13,7 @@ class PyScrapeGUI(tk.Frame):
     def __init__(self, master=None, *args, **kwargs):
         super().__init__(master, **kwargs)
         self.init_window()
+        self.totals_list = []
 
     def init_window(self):
         self.master.title("Ebay Scraper")
@@ -110,7 +111,7 @@ class PyScrapeGUI(tk.Frame):
             products = soup.find_all('li', class_='sresult lvresult clearfix li')
             for product in products:
                 try:
-                    title = product.find('h3', class_='lvtitle').text
+                    title = product.find('h3', class_='lvtitle').text.strip('New listing').strip()
                     price_elem = product.find('li', class_='lvprice prc')
                     base_price = price_elem.find('span', class_='bold').text
                     ship_elem = product.find('li', class_='lvshipping')
@@ -124,8 +125,11 @@ class PyScrapeGUI(tk.Frame):
                     total_price = fl_price + fl_shipping
                     total_price = round(total_price, 2)
                     if total_price <= float(self.max_price):
-                        form = f"{title}\nBase price: {fl_price}\nShipping: {fl_shipping}\nTotal price: {total_price}\n\n"
-                        print(form)
+                        formatted = {"title": title,
+                                        "list_price": fl_price,
+                                        "shipping": fl_shipping,
+                                        "total": total_price}
+                        self.totals_list.append(formatted)
                 except AttributeError: # I cannot figure out what is causing this error
                     continue
 
@@ -140,7 +144,17 @@ class PyScrapeGUI(tk.Frame):
                     smtp.login(self.add, self.pw)
                     smtp.sendmail(self.add, self.rec, msg)
 
+        def format_totals_list():
+            for item in self.totals_list:
+                title = item["title"]
+                total = item["total"]
+                list_price = item["list_price"]
+                shipping = item["shipping"]
+                formed_cheese = f"{title}: ${total} (list: ${list_price}, ship: ${shipping})"
+                print(formed_cheese)
+
         def run_pyscrape():
+            # Email not currently functional
             get_entries()
             soup = parse_page(self.url)
             if self.error_flag == 'InvalidURL':
@@ -150,19 +164,19 @@ class PyScrapeGUI(tk.Frame):
             elif self.error_flag == 'NoEmailInfo':
                 mb.showinfo("Error", "Please enter valid email credentials.")
             else:
-                info = get_price(soup)
-                send_email(info)
+                get_price(soup)
 
 
         def run_pyscrape_no_email():
             get_entries()
             soup = parse_page(self.url)
-            """             if self.error_flag == 'InvalidURL':
+            if self.error_flag == 'InvalidURL':
                 mb.showinfo("Error", "Please enter a valid URL and item name.")
             elif self.error_flag == 'AttributeError':
                 mb.showinfo("Error", "Please enter a valid item name.")
-            else: """
-            get_price(soup)
+            else:
+                get_price(soup)
+                format_totals_list()
 
 root = tk.Tk()
 
