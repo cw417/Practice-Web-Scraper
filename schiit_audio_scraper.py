@@ -7,7 +7,7 @@ import requests
 import smtplib
 import os
 
-class PyScrapeGUI(tk.Frame):
+class SchiitAudioScrapeGUI(tk.Frame):
 
     def __init__(self, master=None, *args, **kwargs):
         super().__init__(master, **kwargs)
@@ -18,7 +18,7 @@ class PyScrapeGUI(tk.Frame):
         self.today = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # File for data to be saved in csv
-        self.csv_fp = 'pyscrape.csv'
+        self.csv_fp = 'schiit_aduio_scraper.csv'
 
         # Headers for requests
         self.headers = {'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 12499.66.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.106 Safari/537.36'}
@@ -149,7 +149,7 @@ class PyScrapeGUI(tk.Frame):
             else:
                 price = get_price(soup)
                 formatted_info = f"{self.item} is {price} on {self.today}"
-                print(formatted_info)
+                mb.showinfo("Results", formatted_info)
                 if not os.path.isfile(self.csv_fp):
                     make_pandas(price)
                 else:    
@@ -166,7 +166,7 @@ class PyScrapeGUI(tk.Frame):
             else:
                 price = get_price(soup)
                 formatted_info = f"{self.item} is {price} on {self.today}"
-                print(formatted_info)
+                mb.showinfo("Results", formatted_info)
                 if not os.path.isfile(self.csv_fp):
                     make_pandas(price)
                 else:    
@@ -174,7 +174,7 @@ class PyScrapeGUI(tk.Frame):
 
 root = tk.Tk()
 
-app = PyScrapeGUI(root)
+app = SchiitAudioScrapeGUI(root)
 app.pack(fill=tk.BOTH, expand=1)
 root.mainloop()
 
