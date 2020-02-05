@@ -14,7 +14,7 @@ class PyScrapeGUI(tk.Frame):
         self.init_window()
 
     def init_window(self):
-        self.master.title("PyScrape")
+        self.master.title("Schiit Audio Scraper")
         self.today = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # File for data to be saved in csv
